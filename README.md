@@ -47,3 +47,23 @@
   (apply max (filter #(= (reverse' % (tens %)) %)
                      (for [x (range 1 max') y (range 1 max')] (* x y))))))
 ```
+
+###### Smallest multiple
+```clojure
+(defn divdes-all [num s]
+  (if (empty? s) true
+                 (and (= (mod num (first s)) 0)
+                      (divides-all num (rest s)))))
+
+(defn get-divisors
+  ([n] (get-divisors (range n 1 -1) []))
+  ([s accum]
+   (if (empty? s)
+     accum
+     (let [x (first s)]
+       (get-divisors (filter #(not= (mod x %) 0) (rest s)) (conj accum x))))))
+
+
+
+(+ 1 (first (filter #(divides-all  (+ 1 %) (get-divisors 20))(range))))
+```
