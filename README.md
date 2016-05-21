@@ -18,7 +18,6 @@
 
 (reduce + (filter #(= (mod % 2) 0)   (take-while #(< % 4000000) (fib 0 1) )))
 ```
-
 ###### Largest prime factor
 ```clojure
 (defn prime? [x] (not (some #(= (mod x %) 0) (range 2 (+ (Math/sqrt x) 1)))))
@@ -27,4 +26,24 @@
   (filter #(and (prime? %) (= (mod x %) 0))
           (range 2 (+ (Math/sqrt x) 1))))
 
+```
+
+
+
+###### Largest palindrome product
+```clojure
+(defn tens
+  ([n] (tens n 1))
+  ([n x] (if (< n 10) x
+                      (tens (quot n 10) (* x 10)))))
+
+(defn reverse'
+  [n mult]
+  (if (= 0 n) 0
+              (+ (* (mod n 10) mult) (reverse' (quot n 10) (quot mult 10)))))
+
+(defn largest-palindrome-product [digits]
+(let [max' (reduce * (for [x (range 0 digits)] 10))]
+  (apply max (filter #(= (reverse' % (tens %)) %)
+                     (for [x (range 1 max') y (range 1 max')] (* x y))))))
 ```
